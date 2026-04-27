@@ -1,0 +1,47 @@
+@startuml tarea_uml_sistema_academico
+' Diagrama de clases UML - Sistema Académico
+
+' Clase base Persona
+class Persona {
+  - nombre: String
+  - rut: String
+  - fechaNacimiento: Date
+  + getEdad(): int
+}
+
+' Herencia: Estudiante y Docente
+class Estudiante extends Persona {
+  - matricula: String
+  - beca: Boolean
+  + inscribirEnCurso(curso: Curso): void
+  + calcularBeneficio(): void
+}
+
+class Docente extends Persona {
+  - especialidad: String
+  + asignarNota(estudiante: Estudiante, asignatura: Asignatura, nota: float): void
+}
+
+class Asignatura {
+  - codigo: String
+  - nombre: String
+  - creditos: int
+}
+
+class Curso {
+  - id: String
+  - semestre: String
+  - horario: String
+  + registrarEstudiante(estudiante: Estudiante): void
+  + registrarNota(estudiante: Estudiante, nota: float): void
+  + calcularPromedio(estudiante: Estudiante): float
+}
+
+' Relaciones
+Persona <|-- Estudiante
+Persona <|-- Docente
+Curso "1" -- "*" Estudiante : inscribe >
+Curso "1" -- "*" Asignatura : contiene >
+Docente "1" -- "*" Curso : imparte >
+
+@enduml
