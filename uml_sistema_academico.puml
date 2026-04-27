@@ -1,6 +1,24 @@
 @startuml tarea_uml_sistema_academico
 ' Diagrama de clases UML - Sistema Académico
 
+class Facultad {
+  - nombre: String
+  - codigo: String
+  - direccion: String
+  + getCarreras(): List<Carrera>
+  + agregarCarrera(carrera: Carrera): void
+}
+
+class Carrera {
+  - nombre: String
+  - codigo: String
+  - duracion: int
+  - aniosAcreditacion: int
+  - facultad: Facultad
+  + getAsignaturas(): List<Asignatura>
+  + agregarAsignatura(asignatura: Asignatura): void
+}
+
 ' Clase base Persona
 class Persona {
   - nombre: String
@@ -15,33 +33,43 @@ class Estudiante extends Persona {
   - beca: Boolean
   + inscribirEnCurso(curso: Curso): void
   + calcularBeneficio(): void
+  + getCursos(): List<Curso>
 }
 
 class Docente extends Persona {
   - especialidad: String
+  - tipoContrato: String
   + asignarNota(estudiante: Estudiante, asignatura: Asignatura, nota: float): void
 }
+
 
 class Asignatura {
   - codigo: String
   - nombre: String
   - creditos: int
+  - esElectiva: Boolean
+  + getCursos(): List<Curso>
 }
 
 class Curso {
   - id: String
   - semestre: String
   - horario: String
+  - modalidad: String
+  - asignatura: Asignatura
   + registrarEstudiante(estudiante: Estudiante): void
   + registrarNota(estudiante: Estudiante, nota: float): void
   + calcularPromedio(estudiante: Estudiante): float
 }
 
+
+
+
 ' Relaciones
-Persona <|-- Estudiante
-Persona <|-- Docente
-Curso "1" -- "*" Estudiante : inscribe >
-Curso "1" -- "*" Asignatura : contiene >
+Facultad "1" o-- "*" Carrera : tiene >
+Carrera "1" o-- "*" Asignatura : ofrece >
+Asignatura "1" o-- "*" Curso : tiene >
+Curso "*" -- "*" Estudiante : inscripción >
 Docente "1" -- "*" Curso : imparte >
 
 @enduml
